@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Mail;
 use App\User;
+use App\Factura;
 
 class HomeController extends Controller {
 
