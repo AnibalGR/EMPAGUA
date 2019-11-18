@@ -26,7 +26,7 @@ class HomeController extends Controller {
 
 
         if (\Illuminate\Support\Facades\Auth::user()->email == "gramajo.anibalv@gmail.com") {
-            return '/admin';
+            return redirect('/admin');
         } else {
             return view('home');
         }
@@ -34,7 +34,7 @@ class HomeController extends Controller {
 
     public function admin() {
 
-        $usuarios = App\User::where('id', '!=', '1')->get();
+        $usuarios = User::where('id', '!=', '1')->get();
 
         return view('admin.admin', ['usuarios' => $usuarios]);
     }
