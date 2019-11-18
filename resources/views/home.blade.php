@@ -28,7 +28,7 @@
                             <td>{{$factura_pendiente->mora}}</td>
                             <td>
                                 @if ($factura_pendiente->estado == 0)
-                                Pendiente de pago <td><a href="">Pagar</a></td>
+                                Pendiente de pago <td><a href="{{ url('/pagarFactura/'.$factura_pendiente->id) }}">Pagar</a></td>
                                 @else
                                 Pagada
                                 @endif

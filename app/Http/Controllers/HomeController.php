@@ -98,5 +98,15 @@ class HomeController extends Controller {
 
         return Redirect::to("admin")->withSuccess('Se ha producido un error al crear la factura.');
     }
+    
+    public function pagarFactura($id){
+        
+        $factura = Factura::FindOrFail($id);
+        $factura->estado = 1;
+        $mensaje = "";
+        $factura->save() ? $mensaje = "La factura ha sido pagada exitosamente." : $mensaje = "La factura no ha podido ser pagada.";
+        
+        return view('admin.resultado', ['mensaje' => $mensaje]);
+    }
 
 }
