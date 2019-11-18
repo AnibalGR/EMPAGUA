@@ -65,6 +65,17 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'contador' => mt_rand(1000, 9999),
         ]);
     }
+    
+    public function redirectPath() {
+
+        if (\Illuminate\Support\Facades\Auth::user()->email == "gramajo.anibalv@gmail.com") {
+            return '/admin';
+        } else {
+            return '/home';
+        }
+    }
+        
 }
