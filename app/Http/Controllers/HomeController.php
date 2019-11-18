@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Redirect;
 use Mail;
 use App\User;
+use App\Factura;
 
 class HomeController extends Controller {
 
@@ -52,6 +54,38 @@ class HomeController extends Controller {
             $message->to($to_email, $to_name)->subject('Laravel Test Mail');
             $message->from('gramajo.anibalv@gmail.com', 'Test Mail');
         });
+    }
+    
+    public function generarFactura(Request $request){
+        
+        $usuario = $request->input('usuario_id');
+        $fecha = $request->input('fecha');
+        $mes = date('d', strtotime($fecha));
+        $dia = date('d', strtotime($fecha));
+        $monto = rand(100, 500);
+        $mora = 0;
+        if($dia > 20){
+            $mora = $monto*0.15;
+        }
+        $estado = 0;
+        
+        $factura = new Factura;
+
+        $factura->usuario = $usuario;
+        $factura->mes = $mes;
+        $factura->monto = $monto;
+        $factura->mora = $mora;
+        $factura->estado = $estado;
+        
+        $user = User::where('id', $usuario)->select("id", "email")->first();
+
+        if($factura->save()){
+            return Redirect::to("admin")->withSuccess('La factura ha sido creada exitosamente por un monto de Q.'. $monto .'.00.Un correo electrónico ha sido'
+                    . ' enviado a ' . $user->email);
+        }
+        
+        return Redirect::to("admin")->withSuccess('Se ha producido un error al crear la factura.');
+        
     }
 
 }
