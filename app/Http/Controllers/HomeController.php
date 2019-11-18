@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Redirect;
 use Mail;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Factura;
 
@@ -25,12 +26,14 @@ class HomeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index() {
+        
 
-
-        if (\Illuminate\Support\Facades\Auth::user()->email == "gramajo.anibalv@gmail.com") {
+        if (Auth::user()->email == "gramajo.anibalv@gmail.com") {
             return redirect('/admin');
         } else {
-            return view('home');
+            $facturas_pendientes = Factura::where([['usuario', '=', Auth::user()->id],['estado', '=', '0']])->get();
+            $facturas = Factura::where('usuario', Auth::user()->id)->get();
+            return view('home', ['facturas' => $facturas, 'facturas_pendientes' => $facturas_pendientes]);
         }
     }
 
@@ -60,7 +63,7 @@ class HomeController extends Controller {
 
         $usuario = $request->input('usuario_id');
         $fecha = $request->input('fecha');
-        $mes = date('d', strtotime($fecha));
+        $mes = date('m', strtotime($fecha));
         $dia = date('d', strtotime($fecha));
         $monto = rand(100, 500);
         $mora = 0;
