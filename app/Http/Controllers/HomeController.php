@@ -55,20 +55,20 @@ class HomeController extends Controller {
             $message->from('gramajo.anibalv@gmail.com', 'Test Mail');
         });
     }
-    
-    public function generarFactura(Request $request){
-        
+
+    public function generarFactura(Request $request) {
+
         $usuario = $request->input('usuario_id');
         $fecha = $request->input('fecha');
         $mes = date('d', strtotime($fecha));
         $dia = date('d', strtotime($fecha));
         $monto = rand(100, 500);
         $mora = 0;
-        if($dia > 20){
-            $mora = $monto*0.15;
+        if ($dia > 20) {
+            $mora = $monto * 0.15;
         }
         $estado = 0;
-        
+
         $factura = new Factura;
 
         $factura->usuario = $usuario;
@@ -76,16 +76,24 @@ class HomeController extends Controller {
         $factura->monto = $monto;
         $factura->mora = $mora;
         $factura->estado = $estado;
-        
-        $user = User::where('id', $usuario)->select("id", "email")->first();
 
-        if($factura->save()){
-            return Redirect::to("admin")->withSuccess('La factura ha sido creada exitosamente por un monto de Q.'. $monto .'.00.Un correo electrónico ha sido'
-                    . ' enviado a ' . $user->email);
+        $user = User::where('id', $usuario)->select("id", "name", "email")->first();
+
+        if ($factura->save()) {
+            $to_name = $user->name;
+            $to_email = $user->email;
+            $data = array('name' => $to_name, 'monto' => $monto);
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+                $message->to($to_email, $to_name)->subject('Nueva factura de Netflix');
+                $message->from('gramajo.anibalv@gmail.com', 'Netflix AyD2');
+            });
+
+
+            return Redirect::to("admin")->withSuccess('La factura ha sido creada exitosamente por un monto de Q.' . $monto . '.00. Un correo electrónico ha sido'
+                            . ' enviado a ' . $user->email);
         }
-        
+
         return Redirect::to("admin")->withSuccess('Se ha producido un error al crear la factura.');
-        
     }
 
 }
