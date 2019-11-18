@@ -18,8 +18,10 @@ class FactController extends Controller
         return FactResource::collection($facturas);
     }
 
-    /*public function actualizarestadofact()
+    public function actualizarestadofact($id)
     {
-        $facturas = Factura::put($estado)
-    }*/
+        $fact = Factura::FindOrFail($id);        
+        $fact-> estado = 1;// ? estado : 0;//si no se envía $estado por defecto será 0
+        $fact-> save();     
+    }
 }

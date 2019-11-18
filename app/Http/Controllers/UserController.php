@@ -17,4 +17,14 @@ class UserController extends Controller
         $users = User::get();
         return UserResource::collection($users);
     }
+
+    /*public function verificaruser($id)
+    {        
+        $users = User::get($id);        
+    }
+
+    return response()->json([
+        'error' => 'Resource not found'
+    ], 404);
+    data: "Resource not found"*/
 }

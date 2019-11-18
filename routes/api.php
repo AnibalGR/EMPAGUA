@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('getusers','UserController@getusers');
 Route::get('consultasaldo', 'FactController@consultasaldo');
+Route::get('factura/{id}', 'FactController@actualizarestadofact');
+Route::get('user/{id}', 'FactController@verificaruser');
