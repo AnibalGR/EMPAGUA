@@ -24,3 +24,5 @@ Route::get('/email', 'HomeController@email')->name('email');
 Route::get('/admin', 'HomeController@admin')->middleware('auth');
 
 Route::post('generar-factura', 'HomeController@generarFactura');
+
+Route::get('/pagarFactura/{id}', 'HomeController@pagarFactura');
